@@ -1,0 +1,20 @@
+# Collabora Online Development Edition (CODE) Dockerfile
+# 基于官方镜像构建自定义配置
+
+FROM collabora/code:latest
+
+# 设置环境变量
+ENV domain=localhost \
+    username=admin \
+    password=admin123 \
+    extra_params=--o:ssl.enable=false
+
+# 暴露端口
+EXPOSE 9980
+
+# 设置重启策略
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+    CMD curl -f http://localhost:9980/browser/dist/admin/admin.html || exit 1
+
+# 启动命令（默认由入口脚本处理）
+CMD []

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  collabora:
+    image: collabora/code:latest
+    container_name: collabora
+    ports:
+      - "9980:9980"
+    environment:
+      - domain=localhost
+      - username=admin
+      - password=admin123
+      - extra_params=--o:ssl.enable=false
+    restart: unless-stopped
+    networks:
+      - collabora-network
+
+networks:
+  collabora-network:
+    driver: bridge
