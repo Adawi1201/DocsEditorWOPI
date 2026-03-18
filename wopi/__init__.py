@@ -1,0 +1,1 @@
+# WOPI Application for Collabora Online Integration
