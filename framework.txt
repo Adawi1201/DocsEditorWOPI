@@ -1,0 +1,16 @@
+flowchart TD
+    subgraph A["用户浏览器 (端口: 5231)"]
+        A1[Vue前端应用<br>http://localhost:5231]
+    end
+
+    subgraph B["服务器/本地环境"]
+        B1[Spring Boot后端<br>端口: 8808]
+        B2[Collabora容器<br>端口: 9980]
+    end
+
+    A1 -- 1. 请求编辑文档 --> B1
+    B1 -- 2. 返回WOPI src地址 --> A1
+    A1 -- 3. 加载iframe<br>http://localhost:9980/... --> B2
+    B2 -- 4. 调用WOPI接口获取文件 --> B1
+    B2 -- 5. WebSocket实时通信 --> B1
+    B1 -- 6. 保存文档 --> B1

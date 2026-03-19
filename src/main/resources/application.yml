@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: Docs4jcolla
+
+  # 数据库配置 - 使用环境变量
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:docs_online}?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # 文件上传配置
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+# 服务器端口
+server:
+  port: ${SERVER_PORT:8808}
+
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.docmindfusion.onlinedoc4j.docs4jcolla.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 应用配置
+app:
+  file:
+    upload-dir: ${UPLOAD_DIR:./docs}
+  # WOPI 安全配置
+  wopi:
+    access-token-secret: ${WOPI_ACCESS_TOKEN_SECRET}
+    default-user: ${WOPI_DEFAULT_USER:admin}
+  # Collabora Online 配置
+  collabora:
+    host: ${COLLABORA_HOST:http://localhost:9980}
+    html-path: ${COLLABORA_HTML_PATH:/browser/4fd2181/cool.html}
+    wopi-host: ${WOPI_HOST:http://host.docker.internal:8808}
+    username: ${COLLABORA_USERNAME:admin}
+    password: ${COLLABORA_PASSWORD}
+  # CORS 配置
+  cors:
+    origins: ${CORS_ORIGINS:http://localhost:5231,http://localhost:5670,http://localhost:9980,http://127.0.0.1:5231,http://127.0.0.1:5670,http://127.0.0.1:9980}
+
+# 日志配置
+logging:
+  level:
+    com.docmindfusion.onlinedoc4j.docs4jcolla: DEBUG

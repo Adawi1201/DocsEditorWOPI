@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  collabora:
+    image: collabora/code:24.04.6.2.1
+    container_name: collabora
+    ports:
+      - "${COLLABORA_PORT:-9980}:9980"
+    environment:
+      - domain=host.docker.internal
+      - username=${COLLABORA_USERNAME:-admin}
+      - password=${COLLABORA_PASSWORD}
+      # 允许来自前端和宿主机的请求（从环境变量读取）
+      - aliasgroup1=http://localhost:${VITE_FRONTEND_PORT:-5231}
+      - aliasgroup1=http://localhost:${FRONTEND_PORT2:-5670}
+      - aliasgroup1=http://host.docker.internal:${VITE_FRONTEND_PORT:-5231}
+      - aliasgroup1=http://host.docker.internal:${FRONTEND_PORT2:-5670}
+      - extra_params=--o:ssl.enable=false --o:net.post_allow=yes --o:net.proto=all
+    cap_add:
+      - MKNOD
+      - CHOWN
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:9980/browser/cool.html"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
